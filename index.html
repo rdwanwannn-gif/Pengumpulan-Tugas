@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduHub Sekolah Online - Dasbor Siswa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8FAFC; }
+  </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+  <div class="min-h-screen flex flex-col md:flex-row">
+    <!-- Sidebar Navigasi -->
+    <aside class="w-full md:w-64 bg-white border-r border-slate-200 flex flex-col justify-between">
+      <div>
+        <!-- Logo -->
+        <div class="p-6 flex items-center gap-3 border-b border-slate-100">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+            E
+          </div>
+          <div>
+            <h1 class="font-bold text-slate-900 text-lg leading-tight">EduHub</h1>
+            <p class="text-xs text-slate-500">Sekolah Online</p>
+          </div>
+        </div>
+
+        <!-- Menu -->
+        <nav class="p-4 space-y-1.5">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-blue-600 text-white font-medium text-sm shadow-sm">
+            <span>🏠</span> Dashboard
+          </a>
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+            <span>📝</span> Daftar Tugas
+          </a>
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+            <span>📅</span> Jadwal
+          </a>
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+            <span>📊</span> Nilai
+          </a>
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 font-medium text-sm transition">
+            <span>👤</span> Profil
+          </a>
+        </nav>
+      </div>
+
+      <div class="p-4 border-t border-slate-100">
+        <button class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-red-600 hover:bg-red-50 font-medium text-sm transition">
+          <span>🚪</span> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Konten Utama -->
+    <main class="flex-1 p-6 md:p-8 overflow-y-auto">
+      <!-- Header Atas -->
+      <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-base border border-blue-200">
+            BS
+          </div>
+          <div>
+            <h2 class="font-bold text-slate-900 text-lg">Budi Santoso</h2>
+            <p class="text-xs text-slate-500 font-medium">Kelas: XII IPA 1 • NIS: 20241089</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="searchInput" onkeyup="filterTasks()" placeholder="Cari mata pelajaran atau tugas..."
+              class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Kartu Ringkasan Akademik -->
+      <section class="mb-8">
+        <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Ringkasan Akademik</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-medium text-slate-500">Total Tugas Aktif</p>
+            <p id="activeCount" class="text-2xl font-bold text-slate-900 mt-1">5</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-medium text-slate-500">Menunggu Penilaian</p>
+            <p id="pendingCount" class="text-2xl font-bold text-amber-600 mt-1">2</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-medium text-slate-500">Rata-rata Nilai</p>
+            <p class="text-2xl font-bold text-blue-600 mt-1">86.5</p>
+          </div>
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-medium text-slate-500">Kehadiran</p>
+            <p class="text-2xl font-bold text-emerald-600 mt-1">96%</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Grid Konten Bawah: Tabel Tugas (Kiri) & Kalender/Pengumuman (Kanan) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Tabel Daftar Tugas -->
+        <section class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 text-base">Daftar Tugas Belum Selesai</h3>
+            <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">Semester Ganjil</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse" id="taskTable">
+              <thead>
+                <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-200">
+                  <th class="py-3.5 px-4 font-semibold">Mata Pelajaran</th>
+                  <th class="py-3.5 px-4 font-semibold">Judul Tugas</th>
+                  <th class="py-3.5 px-4 font-semibold">Tenggat Waktu</th>
+                  <th class="py-3.5 px-4 font-semibold">Status</th>
+                  <th class="py-3.5 px-4 font-semibold text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-sm">
+                <tr class="hover:bg-slate-50 transition" data-id="1">
+                  <td class="py-3.5 px-4 font-medium text-slate-800">Matematika Lanjut</td>
+                  <td class="py-3.5 px-4 text-slate-600">Turunan Fungsi Aljabar</td>
+                  <td class="py-3.5 px-4 text-xs text-amber-600 font-medium">Besok, 23:59 WIB</td>
+                  <td class="py-3.5 px-4 status-cell">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">Aktif</span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right action-cell">
+                    <button onclick="openModal('1', 'Matematika Lanjut', 'Turunan Fungsi Aljabar', 'Besok, 23:59 WIB')"
+                      class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition">
+                      Kumpulkan Tugas
+                    </button>
+                  </td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition" data-id="2">
+                  <td class="py-3.5 px-4 font-medium text-slate-800">Fisika</td>
+                  <td class="py-3.5 px-4 text-slate-600">Laporan Praktikum Medan Magnet</td>
+                  <td class="py-3.5 px-4 text-xs text-slate-500">26 Nov 2026, 18:00</td>
+                  <td class="py-3.5 px-4 status-cell">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">Aktif</span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right action-cell">
+                    <button onclick="openModal('2', 'Fisika', 'Laporan Praktikum Medan Magnet', '26 Nov 2026, 18:00')"
+                      class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition">
+                      Kumpulkan Tugas
+                    </button>
+                  </td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition" data-id="3">
+                  <td class="py-3.5 px-4 font-medium text-slate-800">Bahasa Indonesia</td>
+                  <td class="py-3.5 px-4 text-slate-600">Analisis Struktur Teks Editorial</td>
+                  <td class="py-3.5 px-4 text-xs text-slate-500">27 Nov 2026, 12:00</td>
+                  <td class="py-3.5 px-4 status-cell">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">Aktif</span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right action-cell">
+                    <button onclick="openModal('3', 'Bahasa Indonesia', 'Analisis Struktur Teks Editorial', '27 Nov 2026, 12:00')"
+                      class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition">
+                      Kumpulkan Tugas
+                    </button>
+                  </td>
+                </tr>
+                <tr class="hover:bg-slate-50 transition" data-id="4">
+                  <td class="py-3.5 px-4 font-medium text-slate-800">Kimia</td>
+                  <td class="py-3.5 px-4 text-slate-600">Tata Nama Senyawa Hidrokarbon</td>
+                  <td class="py-3.5 px-4 text-xs text-slate-500">29 Nov 2026, 09:00</td>
+                  <td class="py-3.5 px-4 status-cell">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">Aktif</span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right action-cell">
+                    <button onclick="openModal('4', 'Kimia', 'Tata Nama Senyawa Hidrokarbon', '29 Nov 2026, 09:00')"
+                      class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition">
+                      Kumpulkan Tugas
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Panel Kanan: Pengumuman Sekolah -->
+        <aside class="space-y-6">
+          <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl p-5 text-white shadow-sm">
+            <span class="text-xs uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full font-medium">Info Akademik</span>
+            <h4 class="font-bold text-lg mt-2">Jadwal Ujian Tengah Semester</h4>
+            <p class="text-xs text-blue-100 mt-1 leading-relaxed">
+              Pastikan seluruh tugas harian telah dikumpulkan sebelum kartu ujian dicetak pada akhir bulan.
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 class="font-bold text-slate-900 text-base mb-4">Berita & Pengumuman</h3>
+            <div class="space-y-4">
+              <div class="border-l-2 border-blue-600 pl-3">
+                <p class="text-sm font-semibold text-slate-800">Sosialisasi Proyek P5</p>
+                <p class="text-xs text-slate-500 mt-0.5">Pengumpulan proposal kelompok paling lambat Jumat pukul 15.00 WIB.</p>
+              </div>
+              <div class="border-l-2 border-amber-500 pl-3">
+                <p class="text-sm font-semibold text-slate-800">Pemeliharaan Perpustakaan Digital</p>
+                <p class="text-xs text-slate-500 mt-0.5">Akses e-book ditutup sementara pada Minggu malam pukul 22.00–24.00 WIB.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Pengumpulan Tugas -->
+  <div id="submitModal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl">
+      <div class="flex items-start justify-between border-b border-slate-100 pb-4">
+        <div>
+          <span id="modalSubject" class="text-xs font-semibold text-blue-600 uppercase">Mata Pelajaran</span>
+          <h3 id="modalTitle" class="text-lg font-bold text-slate-900 mt-0.5">Judul Tugas</h3>
+          <p id="modalDeadline" class="text-xs text-slate-500 mt-1">Tenggat: -</p>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+      </div>
+
+      <form onsubmit="handleSubmission(event)" class="mt-5 space-y-4">
+        <input type="hidden" id="modalTaskId" />
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Unggah File Tugas (PDF, DOCX, ZIP - Maks. 20MB)</label>
+          <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-xl p-6 cursor-pointer bg-slate-50 transition">
+            <span class="text-2xl mb-1">📄</span>
+            <span id="fileNameLabel" class="text-xs font-medium text-slate-600">Klik untuk memilih file dari perangkat</span>
+            <input type="file" id="fileInput" class="hidden" onchange="updateFileName()" required />
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Catatan untuk Guru (Opsional)</label>
+          <textarea rows="2" placeholder="Contoh: Lampiran grafik ada di halaman terakhir..."
+            class="w-full px-3.5 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2.5 pt-2">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50">
+            Batal
+          </button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium shadow-sm">
+            Kirim Tugas Sekarang
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id, subject, title, deadline) {
+      document.getElementById('modalTaskId').value = id;
+      document.getElementById('modalSubject').textContent = subject;
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalDeadline').textContent = 'Tenggat: ' + deadline;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileNameLabel').textContent = 'Klik untuk memilih file dari perangkat';
+      document.getElementById('submitModal').classList.remove('hidden');
+      document.getElementById('submitModal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('submitModal').classList.add('hidden');
+      document.getElementById('submitModal').classList.remove('flex');
+    }
+
+    function updateFileName() {
+      const input = document.getElementById('fileInput');
+      if (input.files.length > 0) {
+        document.getElementById('fileNameLabel').textContent = 'File dipilih: ' + input.files[0].name;
+      }
+    }
+
+    function handleSubmission(e) {
+      e.preventDefault();
+      const id = document.getElementById('modalTaskId').value;
+      const row = document.querySelector(`tr[data-id="${id}"]`);
+      if (row) {
+        row.querySelector('.status-cell').innerHTML =
+          '<span class="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">Menunggu Dinilai</span>';
+        row.querySelector('.action-cell').innerHTML =
+          '<span class="text-xs text-slate-400 font-medium">Terkumpul ✓</span>';
+        
+        const activeEl = document.getElementById('activeCount');
+        const pendingEl = document.getElementById('pendingCount');
+        activeEl.textContent = Math.max(0, parseInt(activeEl.textContent) - 1);
+        pendingEl.textContent = parseInt(pendingEl.textContent) + 1;
+      }
+      closeModal();
+    }
+
+    function filterTasks() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('#taskTable tbody tr');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>
